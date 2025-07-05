@@ -1,0 +1,7 @@
+fastapi
+pydantic
+uvicorn
+pymongo[srv]==3.12
+jinja2
+python-multipart
+python-dotenv
