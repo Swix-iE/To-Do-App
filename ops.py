@@ -48,7 +48,7 @@ def update(data: dict):
     except Exception as e:
         return {"error": f"Invalid ObjectId: {e}"}
 
-    update_data = {k: v for k, v in data.items() if k != "_id"}
+    update_data = {k: v for k, v in data.items() if k != "_id" and v is not None}
     update_data["updated_date"] = datetime.now(timezone.utc)
 
     result = collection.update_one(

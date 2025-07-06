@@ -1,8 +1,10 @@
 from fastapi import FastAPI, HTTPException
 from fastapi.responses import JSONResponse
 from typing import List
-from db_schema import ToDOModel
+from db_schema import ToDOModel, ToDOCreateModel, ToDOUpdateModel
 from ops import get_all, create, delete, update
+from db import collection
+from bson import ObjectId
 
 todo_app = FastAPI()
 
@@ -12,7 +14,7 @@ def get_todo() -> List[ToDOModel]:
 
 
 @todo_app.post("/post", response_model=ToDOModel)
-def post_todo(todo: ToDOModel) -> ToDOModel:
+def post_todo(todo: ToDOCreateModel):
     try:
         created_todo = create(todo.model_dump())
         return created_todo
@@ -21,12 +23,16 @@ def post_todo(todo: ToDOModel) -> ToDOModel:
 
 
 @todo_app.put("/put", response_model=ToDOModel)
-def put_todo(todo: ToDOModel) -> ToDOModel:
+def put_todo(todo: ToDOUpdateModel):
     try:
         updated = update(todo.model_dump(by_alias=True))
         if not updated.get("updated"):
             raise HTTPException(status_code=404, detail="Todo not found")
-        return todo
+        
+        updated_doc = collection.find_one({"_id": ObjectId(todo.id)})
+        updated_doc["_id"] = str(updated_doc["_id"])
+        return ToDOModel(**updated_doc)
+        
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
