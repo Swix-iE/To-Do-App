@@ -59,3 +59,17 @@ def update(data: dict):
     
     return {"updated": result.modified_count > 0}
 
+def get_completed():
+    completed_todos = []
+    for col in collection.find({"is_completed": True}):
+        col["_id"] = str(col["_id"])
+        completed_todos.append(ToDOModel(**col))
+    return completed_todos
+
+def get_pending():
+    pending_todos = []
+    for col in collection.find({"is_completed": False}):
+        col["_id"] = str(col["_id"])
+        pending_todos.append(ToDOModel(**col))
+    return pending_todos
+
