@@ -9,7 +9,8 @@ class ToDOCreateModel(BaseModel):
     is_completed : Optional[bool] = None
     
 
-
+class ToDOUpdateModel(ToDOCreateModel):
+    id : str = Field(alias="_id")
 
 class ToDOModel(ToDOCreateModel):
     id : str = Field(alias="_id")
@@ -24,5 +25,4 @@ class ToDOModel(ToDOCreateModel):
         
         )
 
-class ToDOUpdateModel(ToDOCreateModel):
-    id : str = Field(alias="_id")
+
