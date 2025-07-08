@@ -7,9 +7,11 @@ class ToDOCreateModel(BaseModel):
     name : Optional[str] = None
     description: Optional[str] = None
     is_completed : Optional[bool] = None
+    due_date: Optional[datetime] = None
     
 
-
+class ToDOUpdateModel(ToDOCreateModel):
+    id : str = Field(alias="_id")
 
 class ToDOModel(ToDOCreateModel):
     id : str = Field(alias="_id")
@@ -24,5 +26,4 @@ class ToDOModel(ToDOCreateModel):
         
         )
 
-class ToDOUpdateModel(ToDOCreateModel):
-    id : str = Field(alias="_id")
+
