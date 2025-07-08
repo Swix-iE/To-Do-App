@@ -1,5 +1,5 @@
 from db import collection
-from db_schema import ToDOModel
+from db_schema import ToDOModel, ToDOCreateModel
 from bson import ObjectId
 from datetime import datetime, timezone
 
@@ -72,4 +72,14 @@ def get_pending():
         col["_id"] = str(col["_id"])
         pending_todos.append(ToDOModel(**col))
     return pending_todos
+
+def is_overdue():
+    overdue_todos = []
+    for col in collection.find():
+        due_date = col.get("due_date")
+        if due_date and due_date < datetime.now(timezone.utc):
+            col["_id"] = str(col["_id"])
+            overdue_todos.append(ToDOModel(**col))
+    return overdue_todos
+        
 
