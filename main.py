@@ -5,7 +5,7 @@ from db_schema import ToDOModel, ToDOCreateModel, ToDOUpdateModel
 from ops import get_all, create, delete, update
 from db import collection
 from bson import ObjectId
-from ops import get_completed, get_pending
+from ops import get_completed, get_pending, is_overdue
 
 todo_app = FastAPI()
 
@@ -65,6 +65,16 @@ def get_pending_todos() -> List[ToDOModel]:
         if not pending_todos:
             raise HTTPException(status_code=404, detail="No pending todos found")
         return pending_todos
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+    
+@todo_app.get("/overdue", response_model=List[ToDOModel])
+def get_is_overdue() -> List[ToDOModel]:
+    try:
+        overdue_todos = is_overdue()
+        if not overdue_todos:
+            return []
+        return overdue_todos
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
 
