@@ -7,6 +7,7 @@ class ToDOCreateModel(BaseModel):
     name : Optional[str] = None
     description: Optional[str] = None
     is_completed : Optional[bool] = None
+    due_date: Optional[datetime] = None
     
 
 class ToDOUpdateModel(ToDOCreateModel):
